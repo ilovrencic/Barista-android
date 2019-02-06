@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFEADD</color>
-    <color name="colorPrimaryDark">#FFEADD</color>
     <color name="coffeeColor">#5E3B10</color>
     <color name="colorAccent">#CDF7F6</color>
     <color name="textDark">#161616</color>
