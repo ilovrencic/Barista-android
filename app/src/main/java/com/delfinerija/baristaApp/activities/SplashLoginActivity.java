@@ -1,10 +1,21 @@
 package com.delfinerija.baristaApp.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.delfinerija.baristaApp.R;
 
 public class SplashLoginActivity extends AppCompatActivity {
@@ -13,11 +24,69 @@ public class SplashLoginActivity extends AppCompatActivity {
     private Button register_button;
     private TextView sign_in;
     private TextView terms_of_service;
+    private LinearLayout hiddenPanel;
+    private LottieAnimationView animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashlogin);
+
+        final View animationView=findViewById(R.id.animation_view);
+        animation=findViewById(R.id.animation_view);
+        hiddenPanel=findViewById(R.id.hiddenPanel);
+        terms_of_service=findViewById(R.id.terms_of_service);
+        animation.setImageAssetsFolder("images/");
+
+        animation.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ObjectAnimator animator = ObjectAnimator.ofFloat(animationView, "translationY",
+                        0f, -250);
+                animator.setDuration(1500);
+                animator.setInterpolator(new OvershootInterpolator());
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        ObjectAnimator anim = ObjectAnimator.ofFloat(hiddenPanel,"alpha",1f);
+                        anim.setDuration(500);
+                        anim.start();
+                        ObjectAnimator anim2 = ObjectAnimator.ofFloat(terms_of_service,"alpha",1f);
+                        anim2.setDuration(500);
+                        anim2.start();
+                    }
+                });
+                animator.start();
+
+                ObjectAnimator animator2 = ObjectAnimator.ofFloat(animationView, "scaleY",
+                        1f, 0.666f);
+                animator2.setDuration(1000);
+                animator2.setInterpolator(new OvershootInterpolator());
+                animator2.start();
+
+                ObjectAnimator animator3 = ObjectAnimator.ofFloat(animationView, "scaleX",
+                        1f, 0.666f);
+                animator3.setDuration(1000);
+                animator3.setInterpolator(new OvershootInterpolator());
+                animator3.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animation.playAnimation();
         
     }
 }
