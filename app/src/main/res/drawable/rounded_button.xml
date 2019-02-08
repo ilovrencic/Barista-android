@@ -20,7 +20,7 @@
             <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="2dip"
-                android:color="#ffffff" />
+                android:color="@color/coffeeColor" />
             <padding
                 android:bottom="4dp"
                 android:left="4dp"

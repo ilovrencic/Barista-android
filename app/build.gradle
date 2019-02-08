@@ -16,9 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+<<<<<<< HEAD
 
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
+=======
+    packagingOptions {
+>>>>>>> a64164e676bcc99026212a0e50c95161d8936ddd
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE.txt'
@@ -26,6 +30,10 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/notice.txt'
+<<<<<<< HEAD
+=======
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+>>>>>>> a64164e676bcc99026212a0e50c95161d8936ddd
         exclude 'META-INF/ASL2.0'
     }
 }
