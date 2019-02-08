@@ -10,8 +10,10 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:srcCompat="@drawable/placeholder" />
+        android:layout_height="320dp"
+        app:srcCompat="@drawable/placeholder"
+        android:scaleType="centerCrop"
+        />
 
     <RelativeLayout
         android:id="@+id/google_layout"
@@ -25,12 +27,13 @@
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginTop="20sp"
-
+            android:layout_marginTop="0dp"
+            android:clickable="true"
             android:background="@drawable/rounded_button"
             android:drawablePadding="5dp"
             android:text="@string/google_login"
-            android:textColor="@color/textDark" />
+            android:textColor="@color/textDark"
+            />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -55,6 +58,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginTop="7dp"
+        android:clickable="true"
         android:background="@drawable/rounded_button"
         android:text="@string/login_button"
         android:textColor="@color/textDark" />
@@ -75,10 +79,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:clickable="true"
         android:text="@string/sign_in"
         android:textColor="@color/textLight"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -91,6 +97,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5dp"
+            android:clickable="true"
             android:text="@string/terms"
             android:textColor="@color/textLight" />
     </RelativeLayout>

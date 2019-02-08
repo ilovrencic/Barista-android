@@ -13,12 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/BaristaTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.SplashLoginActivity">
+        <activity android:name=".activities.SplashLoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.QRActivitiy"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
         <meta-data
             android:name="preloaded_fonts"
