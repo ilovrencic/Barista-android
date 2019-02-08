@@ -54,7 +54,7 @@ public class SplashLoginActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 ObjectAnimator animator = ObjectAnimator.ofFloat(animationView, "translationY",
-                        0f, -250);
+                        0f, -300);
                 animator.setDuration(1500);
                 animator.setInterpolator(new OvershootInterpolator());
                 animator.addListener(new AnimatorListenerAdapter() {
