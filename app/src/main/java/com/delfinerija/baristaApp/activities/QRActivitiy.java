@@ -1,8 +1,12 @@
 package com.delfinerija.baristaApp.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +29,7 @@ import androidx.annotation.NonNull;
 
 public class QRActivitiy extends AppCompatActivity {
 
+    private LottieAnimationView animationView;
     private CodeScanner mCodeScanner;
     private static final int PERMISSION_REQUEST_CODE = 200;
 
@@ -34,17 +39,22 @@ public class QRActivitiy extends AppCompatActivity {
         setContentView(R.layout.activitiy_qrscan);
 
         if(checkPermission()){
-
-        }else{
-            requestPermission();
+            initActivity();
         }
+    }
+
+    private void initActivity(){
+        animationView = findViewById(R.id.animation_scan);
+        animationView.setSpeed((float) 0.5);
+        animationView.playAnimation();
 
         CodeScannerView scannerView = findViewById(R.id.qr_scanner);
         mCodeScanner = new CodeScanner(this, scannerView);
         startScanning();
     }
 
-    private void startScanning(){
+    //method for scanning
+    private void startScanning() {
         BarcodeFormat qr_code = BarcodeFormat.QR_CODE;
         List<BarcodeFormat> formats = new ArrayList<>();
         formats.add(qr_code);
@@ -57,34 +67,56 @@ public class QRActivitiy extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(QRActivitiy.this,result.getText(),Toast.LENGTH_SHORT).show();
+                        animationView.pauseAnimation();
+                        vibratePhone();
+                        Toast.makeText(QRActivitiy.this, "Succesfully scanned!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
 
+    private void vibratePhone(){
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(500);
+        }
+    }
 
     private boolean checkPermission() {
-        if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
             return false;
         }
         return true;
-    }
 
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.CAMERA},
-                PERMISSION_REQUEST_CODE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
+            case PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                    initActivity();
+                } else {
+                    finish();
                 }
+            }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+

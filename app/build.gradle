@@ -57,4 +57,5 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
+    implementation 'xyz.belvi.mobilevision:barcodescanner:2.0.3'
 }
