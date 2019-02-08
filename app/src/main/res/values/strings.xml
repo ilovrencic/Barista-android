@@ -3,6 +3,6 @@
     <string name="login_button">Sign up with E-mail</string>
     <string name="google_login">Sign in with Google</string>
     <string name="already_acc">Already have an account?</string>
-    <string name="sign_in">Sign in.</string>
+    <string name="sign_in">Don\'t have an account already? <b>Sign up.</b></string>
     <string name="terms"><u>Terms of Service</u></string>
 </resources>
