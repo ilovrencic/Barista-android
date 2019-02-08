@@ -10,6 +10,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +40,9 @@ public class SplashLoginActivity extends AppCompatActivity {
         animation=findViewById(R.id.animation_view);
         hiddenPanel=findViewById(R.id.hiddenPanel);
         terms_of_service=findViewById(R.id.terms_of_service);
+        google_login = findViewById(R.id.google_button);
+        register_button = findViewById(R.id.register_button);
+        sign_in = findViewById(R.id.sign_in_text);
         animation.setImageAssetsFolder("images/");
 
         animation.addAnimatorListener(new Animator.AnimatorListener() {
@@ -87,6 +94,37 @@ public class SplashLoginActivity extends AppCompatActivity {
             }
         });
         animation.playAnimation();
-        
+        initListeners();
+    }
+
+    private void initListeners(){
+        google_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SplashLoginActivity.this,QRActivitiy.class);
+                startActivity(intent);
+            }
+        });
+
+        register_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        terms_of_service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        sign_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }
