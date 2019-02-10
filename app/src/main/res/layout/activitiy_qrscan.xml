@@ -64,6 +64,12 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="18dp"
                     app:srcCompat="@drawable/ic_info_outline_black_24dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo_text"
+                    android:padding="10dp"/>
             </RelativeLayout>
         </Toolbar>
 
