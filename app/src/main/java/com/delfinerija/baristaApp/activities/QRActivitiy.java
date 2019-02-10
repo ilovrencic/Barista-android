@@ -1,6 +1,8 @@
 package com.delfinerija.baristaApp.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,6 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -19,6 +27,9 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.delfinerija.baristaApp.R;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.WanderingCubes;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
@@ -45,6 +56,20 @@ public class QRActivitiy extends AppCompatActivity {
 
     private void initActivity(){
         animationView = findViewById(R.id.animation_scan);
+        final FrameLayout layout = findViewById(R.id.frame_layout);
+        final ViewTreeObserver vto = layout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int width  = layout.getMeasuredWidth();
+                int height = layout.getMeasuredHeight();
+                ViewGroup.LayoutParams layoutParams = animationView.getLayoutParams();
+                layoutParams.height = (int)(height*0.65);
+                layoutParams.width = (int)(width*0.65);
+                animationView.setLayoutParams(layoutParams);
+            }
+        });
         animationView.setSpeed((float) 0.5);
         animationView.playAnimation();
 
@@ -58,6 +83,7 @@ public class QRActivitiy extends AppCompatActivity {
         BarcodeFormat qr_code = BarcodeFormat.QR_CODE;
         List<BarcodeFormat> formats = new ArrayList<>();
         formats.add(qr_code);
+        mCodeScanner.setAutoFocusEnabled(false);
         mCodeScanner.setFormats(formats);
         mCodeScanner.startPreview();
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
@@ -68,7 +94,7 @@ public class QRActivitiy extends AppCompatActivity {
                     public void run() {
                         animationView.pauseAnimation();
                         vibratePhone();
-                        Toast.makeText(QRActivitiy.this, "Succesfully scanned!", Toast.LENGTH_SHORT).show();
+                        showLoading();
                     }
                 });
             }
@@ -107,6 +133,10 @@ public class QRActivitiy extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void showLoading(){
+
     }
 
     @Override
