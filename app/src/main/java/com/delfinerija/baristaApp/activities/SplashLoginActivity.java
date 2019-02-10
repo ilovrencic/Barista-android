@@ -56,15 +56,7 @@ public class SplashLoginActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (firstTimeAppOpen()){
-                    Intent intent = new Intent(SplashLoginActivity.this,SlidesActivity.class);
-                    startActivityForResult(intent,1);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-                else{
-                    moveLogoUp();
-                }
-
+                moveLogoUp();
             }
 
             @Override
@@ -77,8 +69,17 @@ public class SplashLoginActivity extends AppCompatActivity {
 
             }
         });
-        animation.playAnimation();
-        initListeners();
+
+        if (firstTimeAppOpen()){
+            Intent intent = new Intent(SplashLoginActivity.this,SlidesActivity.class);
+            startActivityForResult(intent,1);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
+        else{
+            animation.playAnimation();
+            initListeners();
+        }
+
     }
 
 
@@ -121,7 +122,8 @@ public class SplashLoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1) {
-            moveLogoUp();
+            animation.playAnimation();
+            initListeners();
         }
     }
 
