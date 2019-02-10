@@ -108,6 +108,12 @@ public class QRActivitiy extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mCodeScanner.startPreview();
+    }
 }
 
 
