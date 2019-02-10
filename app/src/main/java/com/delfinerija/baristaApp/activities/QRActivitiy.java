@@ -142,7 +142,9 @@ public class QRActivitiy extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mCodeScanner.startPreview();
+        if(mCodeScanner != null){
+            mCodeScanner.startPreview();
+        }
     }
 }
 
