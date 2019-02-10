@@ -58,4 +58,5 @@ dependencies {
     implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation 'xyz.belvi.mobilevision:barcodescanner:2.0.3'
+    implementation 'com.github.ybq:Android-SpinKit:1.2.0'
 }
