@@ -7,4 +7,5 @@
     <color name="textLight">#464655</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
+    <color name="black_alpha_40">#FF000000</color>
 </resources>
