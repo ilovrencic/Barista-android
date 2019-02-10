@@ -112,7 +112,8 @@
         android:text="@string/terms"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:textColor="@color/textLight" />
+        android:textColor="@color/textLight"
+        android:textStyle="bold"/>
 
 
 

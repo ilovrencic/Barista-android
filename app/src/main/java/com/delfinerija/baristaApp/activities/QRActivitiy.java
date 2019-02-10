@@ -58,7 +58,6 @@ public class QRActivitiy extends AppCompatActivity {
         BarcodeFormat qr_code = BarcodeFormat.QR_CODE;
         List<BarcodeFormat> formats = new ArrayList<>();
         formats.add(qr_code);
-        mCodeScanner.setAutoFocusEnabled(false);
         mCodeScanner.setFormats(formats);
         mCodeScanner.startPreview();
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
