@@ -40,8 +40,7 @@
 
         <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/transperent">
+            android:layout_height="70dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -68,8 +67,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/logo_text"
-                    android:padding="10dp"/>
+
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_toStartOf="@+id/imageView3"
+                    android:layout_toEndOf="@+id/imageView2"
+                    android:padding="16dp"
+                    android:src="@drawable/logo_text_no_lines" />
             </RelativeLayout>
         </Toolbar>
 
