@@ -96,7 +96,7 @@ public class QRActivitiy extends AppCompatActivity {
                         animationView.pauseAnimation();
                         vibratePhone();
                         showLoading();
-                        Intent intent = new Intent(QRActivitiy.this,PickDrinksActivity.class);
+                        Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
                         startActivity(intent);
                     }
                 });

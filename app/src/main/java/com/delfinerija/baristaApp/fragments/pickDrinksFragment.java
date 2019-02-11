@@ -1,39 +1,42 @@
-package com.delfinerija.baristaApp.activities;
+package com.delfinerija.baristaApp.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.delfinerija.baristaApp.R;
-import com.delfinerija.baristaApp.fragments.BeersFragment;
-import com.delfinerija.baristaApp.fragments.NonAlcoholFragment;
-import com.delfinerija.baristaApp.fragments.OtherAlcoholFragment;
-import com.delfinerija.baristaApp.fragments.WarmDrinksFragment;
+import com.delfinerija.baristaApp.activities.SectionsPagerAdapter;
 
-public class PickDrinksActivity extends AppCompatActivity {
+public class pickDrinksFragment extends Fragment {
     private TabLayout tabLayout;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_pick_drinks, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pick_drinks);
-
-        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new WarmDrinksFragment()); //index 0
         adapter.addFragment(new NonAlcoholFragment()); //index 1
         adapter.addFragment(new BeersFragment()); //index 2
         adapter.addFragment(new OtherAlcoholFragment()); //index 3
 
-        ViewPager viewPager = findViewById(R.id.container);
+        ViewPager viewPager = view.findViewById(R.id.container);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4);
 
-        tabLayout = findViewById(R.id.tabs);
+        tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         int[] navIcons = {
@@ -45,7 +48,7 @@ public class PickDrinksActivity extends AppCompatActivity {
 
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            FrameLayout tab = (FrameLayout) LayoutInflater.from(this).inflate(R.layout.nav_tab, null);
+            FrameLayout tab = (FrameLayout) LayoutInflater.from(getContext()).inflate(R.layout.nav_tab, null);
             ImageView tab_icon = tab.findViewById(R.id.selectedImage);
             tab_icon.setImageResource(navIcons[i]);
             tab_icon = tab.findViewById(R.id.notSelectedImage);
@@ -97,7 +100,6 @@ public class PickDrinksActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 }

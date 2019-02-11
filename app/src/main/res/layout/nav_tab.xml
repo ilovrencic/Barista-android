@@ -34,20 +34,18 @@
         android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:background="@color/colorPrimary">
         <ImageView
             android:id="@+id/selectedImage"
-            android:padding="15dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="15dp"
+            android:background="@drawable/zaobljeni_rub6"
+            android:paddingBottom="15dp"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/offee_cup_1" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/coffeeColor">
-        </View>
 
     </RelativeLayout>
 

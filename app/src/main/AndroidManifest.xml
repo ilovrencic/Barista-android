@@ -33,7 +33,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".activities.SlidesActivity" />
-        <activity android:name=".activities.PickDrinksActivity"></activity>
+        <activity android:name=".activities.PickDrinksActivity" />
+        <activity android:name=".activities.orderDrinksActivity"></activity>
     </application>
 
 </manifest>
