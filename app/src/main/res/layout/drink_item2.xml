@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/expandable_toggle_button"
+        android:clickable="true"
+        android:elevation="5dp"
+        android:background="@drawable/rect_card_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:padding="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/offee_cup_1"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/textDark"
+            android:layout_height="wrap_content"
+            android:text="item name"/>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            android:textColor="@color/textDark"
+            android:textStyle="bold"
+            android:text="12 kn"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="5dp" />
+
+    <LinearLayout
+        android:id="@+id/expandable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        >
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:background="@drawable/ic_add_black_24dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/textDark"
+            android:textStyle="bold"
+            android:text="0"/>
+        <Button
+            android:layout_width="30dp"
+            android:layout_gravity="center"
+            android:layout_height="30dp"
+            android:padding="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_remove_black_24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/textDark"
+            android:textSize="20sp"
+            android:text="Total: "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/textDark"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:textSize="20sp"
+            android:text="0 kn"/>
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
