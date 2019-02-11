@@ -26,13 +26,14 @@
         <activity
             android:name=".activities.QRActivitiy"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".activities.SlidesActivity"></activity>
+        <activity android:name=".activities.SlidesActivity" />
+        <activity android:name=".activities.PickDrinksActivity"></activity>
     </application>
 
 </manifest>

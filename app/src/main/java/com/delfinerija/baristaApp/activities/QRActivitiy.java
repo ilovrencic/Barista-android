@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -95,6 +96,8 @@ public class QRActivitiy extends AppCompatActivity {
                         animationView.pauseAnimation();
                         vibratePhone();
                         showLoading();
+                        Intent intent = new Intent(QRActivitiy.this,PickDrinksActivity.class);
+                        startActivity(intent);
                     }
                 });
             }
