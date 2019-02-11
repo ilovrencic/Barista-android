@@ -61,14 +61,16 @@
                     android:layout_height="25dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="18dp"
+                    android:layout_marginEnd="0dp"
                     app:srcCompat="@drawable/ic_info_outline_black_24dp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/logo_text_no_lines"
-                    android:padding="10dp"/>
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
+                    android:src="@drawable/logo_text_no_lines" />
             </RelativeLayout>
         </Toolbar>
 
