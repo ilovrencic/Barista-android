@@ -34,7 +34,7 @@
 
         <activity android:name=".activities.SlidesActivity" />
         <activity android:name=".activities.PickDrinksActivity" />
-        <activity android:name=".activities.orderDrinksActivity"></activity>
+        <activity android:name=".activities.orderDrinksActivity"/>
     </application>
 
 </manifest>
