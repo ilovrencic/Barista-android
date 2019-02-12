@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.network.ApiService;
+import com.delfinerija.baristaApp.network.InitApiService;
 
 public class SplashLoginActivity extends AppCompatActivity {
 
@@ -47,6 +49,8 @@ public class SplashLoginActivity extends AppCompatActivity {
         register_button = findViewById(R.id.register_button);
         sign_in = findViewById(R.id.sign_in_text);
         animation.setImageAssetsFolder("images/");
+
+        startApiService();
 
         animation.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -80,6 +84,10 @@ public class SplashLoginActivity extends AppCompatActivity {
             initListeners();
         }
 
+    }
+
+    private void startApiService(){
+        InitApiService.initApiService();
     }
 
 

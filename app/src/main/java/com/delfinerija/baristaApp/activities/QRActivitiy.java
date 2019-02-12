@@ -28,6 +28,9 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.network.ApiService;
+import com.delfinerija.baristaApp.network.GenericResponse;
+import com.delfinerija.baristaApp.network.InitApiService;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.WanderingCubes;
 import com.github.ybq.android.spinkit.style.Wave;
@@ -38,17 +41,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QRActivitiy extends AppCompatActivity {
 
     private LottieAnimationView animationView;
     private CodeScanner mCodeScanner;
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private ApiService apiService;
+    private Call<GenericResponse<String>> sendQR;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitiy_qrscan);
+        if(savedInstanceState != null){
+            InitApiService.initApiService();
+        }
+
+        apiService = InitApiService.apiService;
 
         if(checkPermission()){
             initActivity();
@@ -95,11 +108,26 @@ public class QRActivitiy extends AppCompatActivity {
                     public void run() {
                         animationView.pauseAnimation();
                         vibratePhone();
-                        showLoading();
-                        Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
-                        startActivity(intent);
+                        checkQRCode(result.toString());
                     }
                 });
+            }
+        });
+    }
+
+    private void checkQRCode(String QRcode){
+        sendQR = apiService.sendQRcode(QRcode);
+        sendQR.enqueue(new Callback<GenericResponse<String>>() {
+            @Override
+            public void onResponse(Call<GenericResponse<String>> call, Response<GenericResponse<String>> response) {
+                //ceka se jos na gospodina buhu
+                Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse<String>> call, Throwable t) {
+
             }
         });
     }
