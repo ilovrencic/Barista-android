@@ -1,12 +1,14 @@
 package com.delfinerija.baristaApp.network;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @GET("/nes random/cekam buhu")
-    Call<GenericResponse<String>> sendQRcode(String QRcode);
+    @GET("/api/v1/qr_codes/find_table/{qr_hash}")
+    Call<ResponseBody> sendQRcode(@Path("qr_hash") String QRcode);
 
 
 }

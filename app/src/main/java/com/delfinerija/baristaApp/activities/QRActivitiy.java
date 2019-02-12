@@ -1,7 +1,6 @@
 package com.delfinerija.baristaApp.activities;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,34 +12,28 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.budiyev.android.codescanner.ScanMode;
 import com.delfinerija.baristaApp.R;
 import com.delfinerija.baristaApp.network.ApiService;
-import com.delfinerija.baristaApp.network.GenericResponse;
 import com.delfinerija.baristaApp.network.InitApiService;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.WanderingCubes;
-import com.github.ybq.android.spinkit.style.Wave;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,7 +44,8 @@ public class QRActivitiy extends AppCompatActivity {
     private CodeScanner mCodeScanner;
     private static final int PERMISSION_REQUEST_CODE = 200;
     private ApiService apiService;
-    private Call<GenericResponse<String>> sendQR;
+    private Call<ResponseBody> sendQR;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,18 +110,30 @@ public class QRActivitiy extends AppCompatActivity {
     }
 
     private void checkQRCode(String QRcode){
+        show_loading("Processing...");
         sendQR = apiService.sendQRcode(QRcode);
-        sendQR.enqueue(new Callback<GenericResponse<String>>() {
+        sendQR.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<GenericResponse<String>> call, Response<GenericResponse<String>> response) {
-                //ceka se jos na gospodina buhu
-                Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
-                startActivity(intent);
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    stop_loading();
+                    Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
+                    startActivity(intent);
+                }else{
+                    stop_loading();
+                    try {
+                        showError(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
-            public void onFailure(Call<GenericResponse<String>> call, Throwable t) {
-
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                stop_loading();
+                showError(t.getMessage());
+                t.printStackTrace();
             }
         });
     }
@@ -166,9 +172,6 @@ public class QRActivitiy extends AppCompatActivity {
         }
     }
 
-    private void showLoading(){
-
-    }
 
     @Override
     protected void onResume() {
@@ -177,6 +180,27 @@ public class QRActivitiy extends AppCompatActivity {
             mCodeScanner.startPreview();
         }
     }
+
+    public void show_loading(String message){
+        progressDialog = ProgressDialog.show(this,"",message,true,false);
+    }
+
+    public void stop_loading(){
+        if(progressDialog != null){
+            progressDialog.dismiss();
+        }
+    }
+
+    public void showError(String message){
+        new AlertDialog.Builder(this)
+                .setTitle("")
+                .setMessage(message)
+                .setPositiveButton("OK",null)
+                .create()
+                .show();
+    }
+
+
 }
 
 
