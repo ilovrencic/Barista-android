@@ -7,7 +7,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class InitApiService {
 
-    public static final String BASE_URL = "http://OVDJE CEKAM BUHU :)";
+    public static final String BASE_URL = "http://www.google.hr";
 
     public static ApiService apiService;
 
