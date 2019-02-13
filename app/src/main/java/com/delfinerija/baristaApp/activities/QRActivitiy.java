@@ -117,35 +117,42 @@ public class QRActivitiy extends AppCompatActivity {
         //show_loading("Processing...");
         viewDialog.showDialog();
         sendQR = apiService.sendQRcode(QRcode);
-        sendQR.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    //stop_loading();
-                    viewDialog.hideDialog();
-                    Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
-                    startActivity(intent);
-                }else{
-                    //stop_loading();
-                    viewDialog.hideDialog();
-                    try {
-                        showError(response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    animationView.playAnimation();
-                }
-            }
 
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                //stop_loading();
-                viewDialog.showDialog();
-                showError(t.getMessage());
-                t.printStackTrace();
-                animationView.playAnimation();
+            public void run() {
+                sendQR.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+                            //stop_loading();
+                            viewDialog.hideDialog();
+                            Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
+                            startActivity(intent);
+                        }else{
+                            //stop_loading();
+                            viewDialog.hideDialog();
+                            try {
+                                showError(response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            animationView.playAnimation();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        //stop_loading();
+                        viewDialog.showDialog();
+                        showError(t.getMessage());
+                        t.printStackTrace();
+                        animationView.playAnimation();
+                    }
+                });
             }
-        });
+        }, 1500);
     }
 
     private void vibratePhone(){
