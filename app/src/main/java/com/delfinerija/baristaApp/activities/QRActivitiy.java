@@ -138,6 +138,7 @@ public class QRActivitiy extends AppCompatActivity {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                            animationView.playAnimation();
                         }
                     }
 
@@ -147,10 +148,11 @@ public class QRActivitiy extends AppCompatActivity {
                         viewDialog.showDialog();
                         showError(t.getMessage());
                         t.printStackTrace();
+                        animationView.playAnimation();
                     }
                 });
             }
-        }, 5000);
+        }, 2000);
     }
 
     private void vibratePhone(){
