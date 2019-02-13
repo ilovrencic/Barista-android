@@ -15,7 +15,7 @@
         android:fontFamily="@font/baloo"
         android:text="QR Code Scanner"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="27sp"
         android:textStyle="bold" />
 
     <com.airbnb.lottie.LottieAnimationView
@@ -28,9 +28,10 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="62dp"
         android:layout_marginBottom="50dp"
+        android:paddingLeft="40dp"
+        app:lottie_enableMergePathsForKitKatAndAbove="true"
         app:lottie_fileName="scan_code.json"
-        app:lottie_loop="true"
-        app:lottie_enableMergePathsForKitKatAndAbove="true">
+        app:lottie_loop="true">
 
     </com.airbnb.lottie.LottieAnimationView>
 

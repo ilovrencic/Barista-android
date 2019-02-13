@@ -95,7 +95,7 @@ public class QRActivitiy extends AppCompatActivity {
         BarcodeFormat qr_code = BarcodeFormat.QR_CODE;
         List<BarcodeFormat> formats = new ArrayList<>();
         formats.add(qr_code);
-        mCodeScanner.setAutoFocusEnabled(true);
+        mCodeScanner.setAutoFocusEnabled(false);
         mCodeScanner.setFormats(formats);
         mCodeScanner.startPreview();
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
@@ -117,42 +117,35 @@ public class QRActivitiy extends AppCompatActivity {
         //show_loading("Processing...");
         viewDialog.showDialog();
         sendQR = apiService.sendQRcode(QRcode);
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        sendQR.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void run() {
-                sendQR.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()){
-                            //stop_loading();
-                            viewDialog.hideDialog();
-                            Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
-                            startActivity(intent);
-                        }else{
-                            //stop_loading();
-                            viewDialog.hideDialog();
-                            try {
-                                showError(response.errorBody().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            animationView.playAnimation();
-                        }
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    //stop_loading();
+                    viewDialog.hideDialog();
+                    Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
+                    startActivity(intent);
+                }else{
+                    //stop_loading();
+                    viewDialog.hideDialog();
+                    try {
+                        showError(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        //stop_loading();
-                        viewDialog.showDialog();
-                        showError(t.getMessage());
-                        t.printStackTrace();
-                        animationView.playAnimation();
-                    }
-                });
+                    animationView.playAnimation();
+                }
             }
-        }, 2000);
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //stop_loading();
+                viewDialog.showDialog();
+                showError(t.getMessage());
+                t.printStackTrace();
+                animationView.playAnimation();
+            }
+        });
     }
 
     private void vibratePhone(){
