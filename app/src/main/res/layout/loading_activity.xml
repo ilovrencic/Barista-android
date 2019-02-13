@@ -7,12 +7,12 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/spin_kit"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
-        app:lottie_fileName="197-glow-loading.json"
+        app:lottie_fileName="boucing_ball.json"
         app:lottie_loop="true" />
 
 </RelativeLayout>

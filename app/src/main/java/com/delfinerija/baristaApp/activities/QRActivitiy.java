@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.entities.ViewDialog;
 import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.InitApiService;
 import com.google.zxing.BarcodeFormat;
@@ -46,6 +48,7 @@ public class QRActivitiy extends AppCompatActivity {
     private ApiService apiService;
     private Call<ResponseBody> sendQR;
     private ProgressDialog progressDialog;
+    private ViewDialog viewDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class QRActivitiy extends AppCompatActivity {
         }
 
         apiService = InitApiService.apiService;
+        viewDialog = new ViewDialog(this);
 
         if(checkPermission()){
             initActivity();
@@ -110,32 +114,43 @@ public class QRActivitiy extends AppCompatActivity {
     }
 
     private void checkQRCode(String QRcode){
-        show_loading("Processing...");
+        //show_loading("Processing...");
+        viewDialog.showDialog();
         sendQR = apiService.sendQRcode(QRcode);
-        sendQR.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    stop_loading();
-                    Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
-                    startActivity(intent);
-                }else{
-                    stop_loading();
-                    try {
-                        showError(response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                stop_loading();
-                showError(t.getMessage());
-                t.printStackTrace();
+            public void run() {
+                sendQR.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.isSuccessful()){
+                            //stop_loading();
+                            viewDialog.hideDialog();
+                            Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
+                            startActivity(intent);
+                        }else{
+                            //stop_loading();
+                            viewDialog.hideDialog();
+                            try {
+                                showError(response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        //stop_loading();
+                        viewDialog.showDialog();
+                        showError(t.getMessage());
+                        t.printStackTrace();
+                    }
+                });
             }
-        });
+        }, 5000);
     }
 
     private void vibratePhone(){
@@ -180,6 +195,8 @@ public class QRActivitiy extends AppCompatActivity {
             mCodeScanner.startPreview();
         }
     }
+
+
 
     public void show_loading(String message){
         progressDialog = ProgressDialog.show(this,"",message,true,false);
