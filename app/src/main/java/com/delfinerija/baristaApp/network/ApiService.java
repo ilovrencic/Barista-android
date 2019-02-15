@@ -10,5 +10,4 @@ public interface ApiService {
     @GET("/api/v1/qr_codes/find_table/{qr_hash}")
     Call<ResponseBody> sendQRcode(@Path("qr_hash") String QRcode);
 
-
 }

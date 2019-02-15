@@ -47,7 +47,6 @@ public class QRActivitiy extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 200;
     private ApiService apiService;
     private Call<ResponseBody> sendQR;
-    private ProgressDialog progressDialog;
     private ViewDialog viewDialog;
 
     @Override
@@ -65,6 +64,7 @@ public class QRActivitiy extends AppCompatActivity {
             initActivity();
         }
     }
+
 
     private void initActivity(){
         animationView = findViewById(R.id.animation_scan);
@@ -90,7 +90,10 @@ public class QRActivitiy extends AppCompatActivity {
         startScanning();
     }
 
-    //method for scanning
+
+    /**
+     * Method for QR scanner setup
+     */
     private void startScanning() {
         BarcodeFormat qr_code = BarcodeFormat.QR_CODE;
         List<BarcodeFormat> formats = new ArrayList<>();
@@ -113,8 +116,12 @@ public class QRActivitiy extends AppCompatActivity {
         });
     }
 
+    /**
+     * @param QRcode scanned QR code in string format
+     *
+     * API call to validate QR code
+     */
     private void checkQRCode(String QRcode){
-        //show_loading("Processing...");
         viewDialog.showDialog();
         sendQR = apiService.sendQRcode(QRcode);
 
@@ -126,12 +133,10 @@ public class QRActivitiy extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.isSuccessful()){
-                            //stop_loading();
                             viewDialog.hideDialog();
                             Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
                             startActivity(intent);
                         }else{
-                            //stop_loading();
                             viewDialog.hideDialog();
                             try {
                                 showError(response.errorBody().string());
@@ -144,7 +149,6 @@ public class QRActivitiy extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        //stop_loading();
                         viewDialog.showDialog();
                         showError(t.getMessage());
                         t.printStackTrace();
@@ -157,11 +161,9 @@ public class QRActivitiy extends AppCompatActivity {
 
     private void vibratePhone(){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
-            //deprecated in API 26
             v.vibrate(500);
         }
     }
@@ -189,24 +191,11 @@ public class QRActivitiy extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
         if(mCodeScanner != null){
             mCodeScanner.startPreview();
-        }
-    }
-
-
-
-    public void show_loading(String message){
-        progressDialog = ProgressDialog.show(this,"",message,true,false);
-    }
-
-    public void stop_loading(){
-        if(progressDialog != null){
-            progressDialog.dismiss();
         }
     }
 
