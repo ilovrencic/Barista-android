@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#FFEADD</color>
     <color name="coffeeColor">#5E3B10</color>
-    <color name="colorAccent">#CDF7F6</color>
+    <color name="blueishColor">#CDF7F6</color>
+    <color name="colorAccent">#5E3B10</color>
     <color name="textDark">#161616</color>
     <color name="textLight">#464655</color>
     <color name="white">#FFF</color>
@@ -11,4 +12,5 @@
     <color name="red_hue">#F05D5E</color>
     <color name="yellow_hue">#EFBC9B</color>
     <color name="green_hue">#B1B695</color>
+    <color name="register">#b2a39a</color>
 </resources>

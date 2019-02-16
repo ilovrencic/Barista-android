@@ -7,4 +7,6 @@
     <string name="terms"><u>Terms of Service</u></string>
     <string name="scanner">Scan QR code on your table</string>
     <string name="welcome">Welcome to Barista</string>
+    <string name="checkbox1">I accept <b><u>Terms of Service</u></b></string>
+    <string name="already">Already have an account? <b>Login here.</b></string>
 </resources>

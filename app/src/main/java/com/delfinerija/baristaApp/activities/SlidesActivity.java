@@ -20,7 +20,7 @@ public class SlidesActivity extends MaterialIntroActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setBoolean();
+        //setBoolean();
         enableLastSlideAlphaExitTransition(true);
 
         getBackButtonTranslationWrapper()

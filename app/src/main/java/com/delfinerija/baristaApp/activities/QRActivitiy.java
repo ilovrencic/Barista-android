@@ -137,6 +137,8 @@ public class QRActivitiy extends AppCompatActivity {
                             Intent intent = new Intent(QRActivitiy.this,orderDrinksActivity.class);
                             startActivity(intent);
                         }else{
+
+                            //TODO change error msg
                             viewDialog.hideDialog();
                             try {
                                 showError(response.errorBody().string());
