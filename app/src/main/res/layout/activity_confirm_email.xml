@@ -40,7 +40,7 @@
         android:fontFamily="@font/baloo"
         android:gravity="center"
         android:text="barista.app@gmail.com"
-        android:textColor="@color/red_hue"
+        android:textColor="@color/colorAccent"
         android:textSize="22sp" />
 
     <TextView
