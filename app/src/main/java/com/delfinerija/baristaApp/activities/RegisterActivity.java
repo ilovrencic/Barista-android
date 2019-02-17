@@ -180,9 +180,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(!isEmailValid(email.getText().toString().trim())){
                     Toasty.warning(RegisterActivity.this,"This email address is not valid!",Toast.LENGTH_SHORT,true).show();
                 }
-                else if(emailTaken){
-                    Toasty.warning(RegisterActivity.this,"This email address is already taken!",Toast.LENGTH_SHORT,true).show();
-                }
                 else{
                     User user = new User(first_name.getText().toString().trim(),last_name.getText().toString().trim(),email.getText().toString().trim(),password.getText().toString(),null);
                     registration(user);
@@ -200,9 +197,11 @@ public class RegisterActivity extends AppCompatActivity {
                     email_layout.setErrorEnabled(false);
                     resetEmailBoolean(false);
                 }else{
-                    email_layout.setErrorEnabled(true);
-                    email_layout.setError("This email is already taken!");
-                    resetEmailBoolean(true);
+                    if(response.code() == 409){
+                        email_layout.setErrorEnabled(true);
+                        email_layout.setError("This email is already taken!");
+                        resetEmailBoolean(true);
+                    }
                 }
             }
 

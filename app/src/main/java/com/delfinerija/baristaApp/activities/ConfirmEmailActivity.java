@@ -12,6 +12,11 @@ import com.delfinerija.baristaApp.R;
 import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.InitApiService;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ConfirmEmailActivity extends AppCompatActivity {
 
     private LottieAnimationView animationView;
@@ -19,6 +24,8 @@ public class ConfirmEmailActivity extends AppCompatActivity {
     private Button login;
     private TextView email;
     private ApiService apiService;
+    private Call<ResponseBody> resendEmail;
+    private String email_address;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,7 +36,7 @@ public class ConfirmEmailActivity extends AppCompatActivity {
             InitApiService.initApiService();
         }
 
-        String email_address = getIntent().getStringExtra("email");
+        email_address = getIntent().getStringExtra("email");
 
         apiService = InitApiService.apiService;
 
@@ -56,7 +63,22 @@ public class ConfirmEmailActivity extends AppCompatActivity {
         resend_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO api poziv za ponovo slanje
+                animationView.playAnimation();
+                resend_email_api();
+            }
+        });
+    }
+
+    private void resend_email_api(){
+        resendEmail = apiService.resendEmail(email_address);
+        resendEmail.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //TODO obraditi nekako
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
             }
         });
     }

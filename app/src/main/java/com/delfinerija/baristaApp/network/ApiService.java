@@ -20,4 +20,8 @@ public interface ApiService {
 
     @GET("/api/v1/check_email")
     Call<ResponseBody> checkEmail(@Query("email") String email);
+
+    @GET("/api/v1/users/resend_confiramtion")
+    Call<ResponseBody> resendEmail(@Query("email") String email);
+
 }
