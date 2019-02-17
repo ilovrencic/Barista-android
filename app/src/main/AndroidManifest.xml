@@ -38,6 +38,7 @@
         <activity android:name=".activities.RegisterActivity"/>
         <activity android:name=".activities.PickDrinksActivity" />
         <activity android:name=".activities.orderDrinksActivity"/>
+        <activity android:name=".activities.ConfirmEmailActivity"></activity>
     </application>
 
 </manifest>

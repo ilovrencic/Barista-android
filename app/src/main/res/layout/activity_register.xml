@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:hint="First name"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:textColor="@color/coffeeColor"
                     android:textColorHint="@color/coffeeColor" />
             </android.support.design.widget.TextInputLayout>
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:hint="Last name"
-                    android:inputType="textPersonName"
+                    android:inputType="textCapSentences"
                     android:textColor="@color/coffeeColor"
                     android:textColorHint="@color/coffeeColor" />
             </android.support.design.widget.TextInputLayout>
@@ -197,6 +197,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_toEndOf="@+id/textView13"
                     android:text="Login here."
+                    android:clickable="true"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold" />
             </RelativeLayout>

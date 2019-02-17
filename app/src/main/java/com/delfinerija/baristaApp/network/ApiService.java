@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -16,4 +17,7 @@ public interface ApiService {
 
     @POST("/api/v1/users")
     Call<ResponseBody> registerUser(@Body User user);
+
+    @GET("/api/v1/check_email")
+    Call<ResponseBody> checkEmail(@Query("email") String email);
 }

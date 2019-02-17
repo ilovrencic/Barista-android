@@ -16,11 +16,23 @@ public class User {
     @Json(name = "password")
     private String password;
 
-    public User(String first_name, String last_name, String email_address, String password){
+    @Json(name = "token")
+    private String token;
+
+    public User(String first_name, String last_name, String email_address, String password,String token){
         this.first_name = first_name;
         this.last_name = last_name;
         this.email_address = email_address;
         this.password = password;
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getEmail_address() {

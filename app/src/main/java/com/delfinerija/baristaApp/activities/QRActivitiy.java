@@ -151,7 +151,7 @@ public class QRActivitiy extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        viewDialog.showDialog();
+                        viewDialog.hideDialog();
                         showError(t.getMessage());
                         t.printStackTrace();
                         animationView.playAnimation();

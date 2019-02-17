@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.delfinerija.baristaApp.R;
@@ -23,6 +24,8 @@ import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.InitApiService;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import es.dmoral.toasty.Toasty;
 import okhttp3.ResponseBody;
@@ -44,7 +47,10 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
     private ApiService apiService;
     private Call<ResponseBody> registerUser;
+    private Call<ResponseBody> checkEmail;
     private ViewDialog viewDialog;
+    private TextView login_text;
+    private boolean emailTaken = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,11 +75,36 @@ public class RegisterActivity extends AppCompatActivity {
         repeat_password_layout = findViewById(R.id.again_layout);
         checkBox = findViewById(R.id.checkBox);
         register = findViewById(R.id.register_button);
+        login_text = findViewById(R.id.login_text);
 
         initListeners();
     }
 
     private void initListeners(){
+        login_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO connect with sign in activity
+            }
+        });
+
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    isEmailTaken(email.getText().toString().trim());
+                    if(!isEmailValid(email.getText().toString().trim())){
+                        email_layout.setErrorEnabled(true);
+                        email_layout.setError("Not a valid email!");
+                    }
+
+                    if(isEmailValid(email.getText().toString().trim())){
+                        email_layout.setErrorEnabled(false);
+                    }
+                }
+            }
+        });
+
         email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -85,8 +116,13 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(isEmailValid(email.getText().toString().trim())){
+                    email_layout.setErrorEnabled(false);
+                }
             }
         });
+
+
 
         password.addTextChangedListener(new TextWatcher() {
             @Override
@@ -140,11 +176,39 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(!repeat_password.getText().toString().equals(password.getText().toString())){
                     Toasty.warning(RegisterActivity.this, "Your passwords do not match!", Toast.LENGTH_SHORT, true).show();
                 }else if(!checkBox.isChecked()){
-                    Toasty.warning(RegisterActivity.this, "The checkbox can't be unchecked!.", Toast.LENGTH_SHORT, true).show();
-                }else{
-                    User user = new User(first_name.getText().toString().trim(),last_name.getText().toString().trim(),email.getText().toString().trim(),password.getText().toString());
+                    Toasty.warning(RegisterActivity.this, "The checkbox can't be unchecked!", Toast.LENGTH_SHORT, true).show();
+                }else if(!isEmailValid(email.getText().toString().trim())){
+                    Toasty.warning(RegisterActivity.this,"This email address is not valid!",Toast.LENGTH_SHORT,true).show();
+                }
+                else if(emailTaken){
+                    Toasty.warning(RegisterActivity.this,"This email address is already taken!",Toast.LENGTH_SHORT,true).show();
+                }
+                else{
+                    User user = new User(first_name.getText().toString().trim(),last_name.getText().toString().trim(),email.getText().toString().trim(),password.getText().toString(),null);
                     registration(user);
                 }
+            }
+        });
+    }
+
+    private void isEmailTaken(String email){
+        checkEmail = apiService.checkEmail(email);
+        checkEmail.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    email_layout.setErrorEnabled(false);
+                    resetEmailBoolean(false);
+                }else{
+                    email_layout.setErrorEnabled(true);
+                    email_layout.setError("This email is already taken!");
+                    resetEmailBoolean(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //TODO think what to put here
             }
         });
     }
@@ -156,6 +220,13 @@ public class RegisterActivity extends AppCompatActivity {
                 .setPositiveButton("OK",null)
                 .create()
                 .show();
+    }
+
+    private boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     private void registration(User user){
@@ -175,7 +246,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                             //TODO save token
 
-                            Intent intent = new Intent(RegisterActivity.this,QRActivitiy.class);
+                            Intent intent = new Intent(RegisterActivity.this,ConfirmEmailActivity.class);
+                            intent.putExtra("email",email.getText().toString().trim());
                             startActivity(intent);
                             finish();
                         }else{
@@ -190,13 +262,17 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        viewDialog.showDialog();
+                        viewDialog.hideDialog();
                         showError(t.getMessage());
                         t.printStackTrace();
                     }
                 });
             }
         },500);
+    }
+
+    private void resetEmailBoolean(boolean value){
+        emailTaken = value;
     }
 
 }
