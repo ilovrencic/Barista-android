@@ -180,6 +180,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(!isEmailValid(email.getText().toString().trim())){
                     Toasty.warning(RegisterActivity.this,"This email address is not valid!",Toast.LENGTH_SHORT,true).show();
                 }
+                else if(emailTaken){
+                    Toasty.warning(RegisterActivity.this,"This email address is already taken!",Toast.LENGTH_SHORT,true).show();
+                }
                 else{
                     User user = new User(first_name.getText().toString().trim(),last_name.getText().toString().trim(),email.getText().toString().trim(),password.getText().toString(),null);
                     registration(user);
@@ -242,9 +245,6 @@ public class RegisterActivity extends AppCompatActivity {
                         if(response.isSuccessful()){
                             viewDialog.hideDialog();
                             Toasty.success(RegisterActivity.this,"Registration successful.",Toast.LENGTH_SHORT,true).show();
-
-                            //TODO save token
-
                             Intent intent = new Intent(RegisterActivity.this,ConfirmEmailActivity.class);
                             intent.putExtra("email",email.getText().toString().trim());
                             startActivity(intent);

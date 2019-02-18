@@ -147,22 +147,22 @@ public class SplashLoginActivity extends AppCompatActivity {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SplashLoginActivity.this,RegisterActivity.class);
-                startActivity(intent);
+                //TODO sign in activity
             }
         });
 
         terms_of_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //TODO terms of service
             }
         });
 
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(SplashLoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
             }
         });
     }
