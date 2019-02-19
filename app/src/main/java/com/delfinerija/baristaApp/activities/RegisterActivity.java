@@ -84,7 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
         login_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO connect with sign in activity
+                Intent intent = new Intent(RegisterActivity.this,SignInActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -273,5 +275,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void resetEmailBoolean(boolean value){
         emailTaken = value;
     }
+
+    //TODO override back and ask if they really want to leave ( if they have written something)
 
 }

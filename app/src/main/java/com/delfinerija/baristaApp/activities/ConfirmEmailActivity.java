@@ -1,5 +1,6 @@
 package com.delfinerija.baristaApp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +57,10 @@ public class ConfirmEmailActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO login intent
+                //TODO ask if they have received an email
+                Intent intent = new Intent(ConfirmEmailActivity.this,SignInActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -82,7 +86,6 @@ public class ConfirmEmailActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

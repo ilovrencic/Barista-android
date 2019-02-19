@@ -147,7 +147,8 @@ public class SplashLoginActivity extends AppCompatActivity {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO sign in activity
+                Intent intent = new Intent(SplashLoginActivity.this,SignInActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -166,4 +167,6 @@ public class SplashLoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    //TODO internet availability check
 }
