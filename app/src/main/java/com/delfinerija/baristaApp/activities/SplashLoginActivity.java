@@ -3,27 +3,19 @@ package com.delfinerija.baristaApp.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.delfinerija.baristaApp.R;
-import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.InitApiService;
 
 public class SplashLoginActivity extends AppCompatActivity {
@@ -147,7 +139,12 @@ public class SplashLoginActivity extends AppCompatActivity {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO sign in activity
+                Intent intent = new Intent(SplashLoginActivity.this,LoginActivity.class);
+                try{
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 

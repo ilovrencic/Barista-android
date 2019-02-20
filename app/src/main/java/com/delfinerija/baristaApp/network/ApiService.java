@@ -31,9 +31,9 @@ public interface ApiService {
     @DELETE("/api/v1/session")
     Call<ResponseBody> signOutUser(@Header("Authorization") String token);
 
-    //TODO napravit user-a kojeg mi vraća
+
     @POST("/api/v1/session")
-    Call<ResponseBody> signInUser();
+    Call<GenericResponse<User>> signInUser(@Query("email") String email,@Query("password") String password);
 
     //TODO napravit entity lokacija
     @GET("/api/v1/locations")
