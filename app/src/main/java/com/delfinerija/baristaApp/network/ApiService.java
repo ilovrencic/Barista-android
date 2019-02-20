@@ -1,5 +1,6 @@
 package com.delfinerija.baristaApp.network;
 
+import com.delfinerija.baristaApp.entities.Session;
 import com.delfinerija.baristaApp.entities.User;
 
 import okhttp3.ResponseBody;
@@ -33,7 +34,7 @@ public interface ApiService {
 
 
     @POST("/api/v1/session")
-    Call<GenericResponse<User>> signInUser(@Query("email") String email,@Query("password") String password);
+    Call<GenericResponse<User>> signInUser(@Query("email") String email, @Query("password") String password, @Body Session session);
 
     //TODO napravit entity lokacija
     @GET("/api/v1/locations")

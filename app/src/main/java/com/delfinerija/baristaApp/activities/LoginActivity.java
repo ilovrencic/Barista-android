@@ -6,12 +6,14 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.entities.Session;
 import com.delfinerija.baristaApp.entities.User;
 import com.delfinerija.baristaApp.entities.ViewDialog;
 import com.delfinerija.baristaApp.network.ApiService;
@@ -34,11 +36,13 @@ public class LoginActivity extends AppCompatActivity {
     private ApiService apiService;
     private Call<GenericResponse<User>> login;
     private ViewDialog viewDialog;
+    private TextView forgot_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         if(savedInstanceState != null){
             InitApiService.initApiService();
@@ -51,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password_signin);
         login_button = findViewById(R.id.login_button);
         register_text = findViewById(R.id.register_text);
+        forgot_password = findViewById(R.id.forgot_password);
 
         initListeners();
     }
@@ -75,11 +80,19 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO reset the password screen
+            }
+        });
     }
 
     private void login_user(String email,String password){
+        Session session = new Session(email,password);
+
         viewDialog.showDialog();
-        login = apiService.signInUser(email,password);
+        login = apiService.signInUser(email,password,session);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

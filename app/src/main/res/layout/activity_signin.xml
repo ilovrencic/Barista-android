@@ -23,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
                 app:srcCompat="@drawable/logo_together" />
@@ -45,7 +45,7 @@
                     android:id="@+id/email_signin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="E-mail"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/coffeeColor"
                     android:textColorHint="@color/coffeeColor" />
@@ -71,6 +71,18 @@
                     android:textColor="@color/coffeeColor"
                     android:textColorHint="@color/coffeeColor" />
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot your password?"
+                android:layout_marginTop="2dp"
+                android:layout_gravity="right"
+                android:layout_marginEnd="35dp"
+                android:textColor="@color/coffeeColor"
+                android:clickable="true"
+                android:background="?attr/selectableItemBackground"
+                android:id="@+id/forgot_password"/>
 
             <Button
                 android:id="@+id/login_button"
@@ -109,7 +121,8 @@
                     android:clickable="true"
                     android:text="Register."
                     android:textColor="@color/coffeeColor"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:background="?attr/selectableItemBackground"/>
             </LinearLayout>
 
 

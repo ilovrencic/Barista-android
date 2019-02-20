@@ -84,7 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
         login_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO connect with sign in activity
+                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -210,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                //TODO think what to put here
+                Toasty.error(RegisterActivity.this,"An unexpected error occurred!",Toast.LENGTH_SHORT,true).show();
             }
         });
     }

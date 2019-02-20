@@ -199,7 +199,8 @@
                     android:text="Login here."
                     android:clickable="true"
                     android:textColor="@color/colorAccent"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:background="?attr/selectableItemBackground"/>
             </RelativeLayout>
 
 
