@@ -1,6 +1,7 @@
 package com.delfinerija.baristaApp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.delfinerija.baristaApp.R;
 import com.delfinerija.baristaApp.entities.Session;
 import com.delfinerija.baristaApp.entities.User;
+import com.delfinerija.baristaApp.entities.UserResponse;
 import com.delfinerija.baristaApp.entities.ViewDialog;
 import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.GenericResponse;
@@ -34,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login_button;
     private TextView register_text;
     private ApiService apiService;
-    private Call<GenericResponse<User>> login;
+    private Call<GenericResponse<UserResponse>> login;
     private ViewDialog viewDialog;
     private TextView forgot_password;
 
@@ -98,16 +100,21 @@ public class LoginActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                login.enqueue(new Callback<GenericResponse<User>>() {
+                login.enqueue(new Callback<GenericResponse<UserResponse>>() {
                     @Override
-                    public void onResponse(Call<GenericResponse<User>> call, Response<GenericResponse<User>> response) {
+                    public void onResponse(Call<GenericResponse<UserResponse>> call, Response<GenericResponse<UserResponse>> response) {
                         viewDialog.hideDialog();
                         if(response.isSuccessful()){
-                            //TODO spremi token
+
+                            UserResponse userResponse = response.body().getResponseData();
+                            saveUserInMemory(userResponse.getUser());
+                            Toast.makeText(LoginActivity.this,userResponse.getUser().getToken(),Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(LoginActivity.this,QRActivitiy.class);
                             startActivity(intent);
                             finish();
                         }else{
+                            //TODO change error message
                             try {
                                 showError(response.errorBody().string());
                             } catch (IOException e) {
@@ -117,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<GenericResponse<User>> call, Throwable t) {
+                    public void onFailure(Call<GenericResponse<UserResponse>> call, Throwable t) {
                         viewDialog.hideDialog();
                         showError(t.getMessage());
                         t.printStackTrace();
@@ -126,6 +133,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         },500);
 
+    }
+
+    private void saveUserInMemory(User user){
+        getSharedPreferences("UserData", MODE_PRIVATE)
+                        .edit()
+                        .putString("token",user.getToken())
+                        .putBoolean("isLogged",true)
+                        .apply();
     }
 
     public void showError(String message){

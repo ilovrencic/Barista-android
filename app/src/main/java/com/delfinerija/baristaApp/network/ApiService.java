@@ -2,6 +2,7 @@ package com.delfinerija.baristaApp.network;
 
 import com.delfinerija.baristaApp.entities.Session;
 import com.delfinerija.baristaApp.entities.User;
+import com.delfinerija.baristaApp.entities.UserResponse;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,7 +18,7 @@ public interface ApiService {
 
     //TODO dodati token
     @GET("/api/v1/qr_codes/find_table/{qr_hash}")
-    Call<ResponseBody> sendQRcode(@Path("qr_hash") String QRcode);
+    Call<ResponseBody> sendQRcode(@Header("Authorization") String token,@Path("qr_hash") String QRcode);
 
     @POST("/api/v1/users")
     Call<ResponseBody> registerUser(@Body User user);
@@ -34,7 +35,7 @@ public interface ApiService {
 
 
     @POST("/api/v1/session")
-    Call<GenericResponse<User>> signInUser(@Query("email") String email, @Query("password") String password, @Body Session session);
+    Call<GenericResponse<UserResponse>> signInUser(@Query("email") String email, @Query("password") String password, @Body Session session);
 
     //TODO napravit entity lokacija
     @GET("/api/v1/locations")

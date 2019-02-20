@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,9 +16,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.budiyev.android.codescanner.CodeScanner;
@@ -48,6 +51,7 @@ public class QRActivitiy extends AppCompatActivity {
     private ApiService apiService;
     private Call<ResponseBody> sendQR;
     private ViewDialog viewDialog;
+    private ImageView info_button;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +63,30 @@ public class QRActivitiy extends AppCompatActivity {
 
         apiService = InitApiService.apiService;
         viewDialog = new ViewDialog(this);
+        info_button = findViewById(R.id.info);
+        initListeners();
 
         if(checkPermission()){
             initActivity();
         }
+    }
+
+    private void initListeners(){
+        info_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO promijenit da ti pokaze animaciju skeniranja QR
+                logut_user();
+            }
+        });
+    }
+
+    private void logut_user(){
+        getSharedPreferences("UserData", MODE_PRIVATE)
+                .edit()
+                .clear()
+                .apply();
+        finish();
     }
 
 
@@ -122,8 +146,10 @@ public class QRActivitiy extends AppCompatActivity {
      * API call to validate QR code
      */
     private void checkQRCode(String QRcode){
+        String token = getUserToken();
+
         viewDialog.showDialog();
-        sendQR = apiService.sendQRcode(QRcode);
+        sendQR = apiService.sendQRcode(token,QRcode);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -159,6 +185,12 @@ public class QRActivitiy extends AppCompatActivity {
                 });
             }
         }, 1500);
+    }
+
+    private String getUserToken(){
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        String token = prefs.getString("token","");
+        return token;
     }
 
     private void vibratePhone(){
