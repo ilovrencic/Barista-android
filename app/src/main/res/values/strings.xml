@@ -9,4 +9,6 @@
     <string name="welcome">Welcome to Barista</string>
     <string name="checkbox1">I accept <b><u>Terms of Service</u></b></string>
     <string name="already">Already have an account? <b>Login here.</b></string>
+    <string name="hey">Hey,</string>
+    <string name="ivan">Ivan</string>
 </resources>

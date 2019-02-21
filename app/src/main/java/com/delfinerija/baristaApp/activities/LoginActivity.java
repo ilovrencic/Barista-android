@@ -108,9 +108,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             UserResponse userResponse = response.body().getResponseData();
                             saveUserInMemory(userResponse.getUser());
-                            Toast.makeText(LoginActivity.this,userResponse.getUser().getToken(),Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(LoginActivity.this,QRActivitiy.class);
+                            Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
                             startActivity(intent);
                             finish();
                         }else{
@@ -139,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         getSharedPreferences("UserData", MODE_PRIVATE)
                         .edit()
                         .putString("token",user.getToken())
+                        .putString("name",user.getFirst_name())
                         .putBoolean("isLogged",true)
                         .apply();
     }

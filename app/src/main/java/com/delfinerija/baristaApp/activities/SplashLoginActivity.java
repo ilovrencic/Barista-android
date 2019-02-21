@@ -131,8 +131,7 @@ public class SplashLoginActivity extends AppCompatActivity {
         google_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SplashLoginActivity.this,QRActivitiy.class);
-                startActivity(intent);
+                //TODO google login
             }
         });
 
