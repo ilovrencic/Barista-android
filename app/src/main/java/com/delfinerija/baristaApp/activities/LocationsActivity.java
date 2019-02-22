@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.delfinerija.baristaApp.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -27,10 +28,15 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
+import es.dmoral.toasty.Toasty;
+
 public class LocationsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap gmap;
+    private LocationManager mLocationManager;
 
 
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -81,17 +87,38 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void zoomToMyLocation(GoogleMap googleMap) {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
-        LatLng latLng = new LatLng(latitude,longitude);
+        Location location = getLastKnownLocation();
 
-        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(latLng, 8);
-        googleMap.animateCamera(yourLocation);
+        if(location != null){
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+
+            CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(latLng, 8);
+            googleMap.animateCamera(yourLocation);
+        }else{
+            Toasty.error(LocationsActivity.this,"Your GPS location is not recognizable!", Toast.LENGTH_SHORT,true).show();
+        }
+    }
+
+    private Location getLastKnownLocation() {
+        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return null;
+            }
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
     }
 
     private void putPinsOnMap(GoogleMap googleMap){
