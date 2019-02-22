@@ -52,7 +52,15 @@ public class SplashLoginActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                moveLogoUp();
+                if (getSharedPreferences("UserData", MODE_PRIVATE).getBoolean("isLogged", false)){
+                    Intent intent = new Intent(SplashLoginActivity.this,MainMenuActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    finish();
+                }else{
+                    moveLogoUp();
+                }
+
             }
 
             @Override
@@ -141,6 +149,7 @@ public class SplashLoginActivity extends AppCompatActivity {
                 Intent intent;
                 intent = new Intent(SplashLoginActivity.this,LoginActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -156,6 +165,7 @@ public class SplashLoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SplashLoginActivity.this,RegisterActivity.class);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }
