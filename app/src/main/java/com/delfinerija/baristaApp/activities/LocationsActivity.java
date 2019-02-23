@@ -155,6 +155,8 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.813823,15.983918)).title("Caffe Bar Finjak").icon(icon));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.817365,15.976507)).title("Caffe Bar History").icon(icon));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.732295,15.993450)).title("Caffe Bar Oxygen").icon(icon));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.791110,15.915790)).title("Caffe Bar Vivas Prečko").icon(icon));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.716210,15.997670)).title("Caffe Bar Dobardan").icon(icon));
     }
 
     private boolean checkPermission() {
@@ -172,6 +174,7 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
         switch (requestCode) {
             case LOCATION_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initMaps();
                     checkIfLocationIsEnabled();
                 } else {
                     finish();
