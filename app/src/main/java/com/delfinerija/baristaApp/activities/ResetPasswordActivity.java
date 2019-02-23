@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,49 +20,50 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ConfirmEmailActivity extends AppCompatActivity {
+public class ResetPasswordActivity extends AppCompatActivity {
 
-    private LottieAnimationView animationView;
-    private Button resend_email;
-    private Button login;
     private TextView email;
+    private TextView text;
+    private Button login;
+    private Button resend_email;
     private ApiService apiService;
-    private Call<ResponseBody> resendEmail;
-    private String email_address;
+    private Call<ResponseBody> reset_password;
+    private LottieAnimationView animationView;
+    private String email_intent;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_email);
-
         if(savedInstanceState != null){
             InitApiService.initApiService();
         }
 
-        email_address = getIntent().getStringExtra("email");
+        email_intent = getIntent().getStringExtra("email");
 
         apiService = InitApiService.apiService;
-
         animationView = findViewById(R.id.email_animation);
-        resend_email = findViewById(R.id.resend_button);
-        login = findViewById(R.id.login_me_button);
         email = findViewById(R.id.user_email);
-        email.setText(email_address);
+        email.setText(email_intent);
+        text = findViewById(R.id.reset_pass_text);
+        login = findViewById(R.id.login_me_button);
+        resend_email = findViewById(R.id.resend_button);
+
+        text.setText("We've sent you a link for password resetting to your email address. Please check your email inbox. It could take up to 10 minutes for email to arrive.");
+        initListeners();
 
         animationView.setSpeed((float)0.8);
         animationView.playAnimation();
-
-        initListeners();
     }
 
     private void initListeners(){
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConfirmEmailActivity.this,LoginActivity.class);
+                Intent intent = new Intent(ResetPasswordActivity.this,LoginActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
             }
         });
 
@@ -76,24 +76,23 @@ public class ConfirmEmailActivity extends AppCompatActivity {
     }
 
     private void resend_email_api(){
-        resendEmail = apiService.resendEmail(email_address);
-        resendEmail.enqueue(new Callback<ResponseBody>() {
+        reset_password = apiService.resetPassword(email_intent);
+        reset_password.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
                     animationView.playAnimation();
                 }else{
-                    Toasty.error(ConfirmEmailActivity.this,"An error occurred. Try again!", Toast.LENGTH_SHORT,true).show();
+                    Toasty.error(ResetPasswordActivity.this,"An error occurred. Try again!", Toast.LENGTH_SHORT,true).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toasty.error(ConfirmEmailActivity.this,"Unexpected error occurred!",Toast.LENGTH_SHORT,true).show();
+                Toasty.error(ResetPasswordActivity.this,"An error occurred. Try again!", Toast.LENGTH_SHORT,true).show();
             }
         });
+
+
     }
-
-
-
 }

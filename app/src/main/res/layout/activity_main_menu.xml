@@ -68,7 +68,6 @@
         android:layout_marginTop="25dp"
         android:background="@drawable/rounded_button_qr"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
         android:focusable="true">
 
         <ImageView
@@ -104,7 +103,6 @@
             android:layout_marginRight="7dp"
             android:background="@drawable/rounded_button_location"
             android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
             android:focusable="true">
 
             <ImageView
@@ -133,7 +131,6 @@
             android:layout_marginLeft="7dp"
             android:background="@drawable/rounded_button_profile"
             android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
             android:focusable="true">
 
             <ImageView
