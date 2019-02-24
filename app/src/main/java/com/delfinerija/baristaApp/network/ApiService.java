@@ -29,6 +29,9 @@ public interface ApiService {
     @POST("/api/v1/users/resend_confirmation")
     Call<ResponseBody> resendEmail(@Query("email") String email);
 
+    @POST("/api/v1/users/reset_password")
+    Call<ResponseBody> resetPassword(@Query("email") String email);
+
 
     @DELETE("/api/v1/session")
     Call<ResponseBody> signOutUser(@Header("Authorization") String token);

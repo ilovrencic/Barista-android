@@ -82,7 +82,7 @@
                 android:textColor="@color/coffeeColor"
                 android:clickable="true"
                 android:background="?attr/selectableItemBackground"
-                android:id="@+id/forgot_password"/>
+                android:id="@+id/forgot_password" />
 
             <Button
                 android:id="@+id/login_button"
