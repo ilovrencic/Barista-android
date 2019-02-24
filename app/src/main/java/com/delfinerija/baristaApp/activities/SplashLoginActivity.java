@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -53,10 +56,7 @@ public class SplashLoginActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (getSharedPreferences("UserData", MODE_PRIVATE).getBoolean("isLogged", false)){
-                    Intent intent = new Intent(SplashLoginActivity.this,MainMenuActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
+                    moveLogoToTop();
                 }else{
                     moveLogoUp();
                 }
@@ -83,6 +83,43 @@ public class SplashLoginActivity extends AppCompatActivity {
             animation.playAnimation();
             initListeners();
         }
+
+    }
+
+    private void moveLogoToTop() {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(animationView, "translationY",
+                0f, -(Resources.getSystem().getDisplayMetrics().heightPixels / 2)+150);
+        animator.setDuration(1500);
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Intent intent = new Intent(SplashLoginActivity.this,MainMenuActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+            }
+        });
+        animator.start();
+
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(animationView, "scaleY",
+                1f, 0.55f);
+        animator2.setDuration(1500);
+        animator2.setInterpolator(new OvershootInterpolator());
+        animator2.start();
+
+        ObjectAnimator animator4 = ObjectAnimator.ofFloat(animationView, "translationX",
+                0f, -10);
+        animator4.setDuration(500);
+        animator4.setInterpolator(new OvershootInterpolator());
+        animator4.start();
+
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(animationView, "scaleX",
+                1f, 0.55f);
+        animator3.setDuration(1500);
+        animator3.setInterpolator(new OvershootInterpolator());
+        animator3.start();
+
 
     }
 
