@@ -1,25 +1,25 @@
-package com.delfinerija.baristaApp.activities;
+package com.delfinerija.baristaApp.fragments;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.GnssStatus;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.delfinerija.baristaApp.R;
@@ -30,7 +30,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -38,7 +37,9 @@ import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
-public class LocationsActivity extends AppCompatActivity implements OnMapReadyCallback {
+import static android.content.Context.LOCATION_SERVICE;
+
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
     private GoogleMap gmap;
@@ -50,11 +51,15 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
     private static final int LOCATION_REQUEST_CODE = 1997;
     private static final int ENABLE_LOCATION_RESULT_CODE = 42;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_coffeshop_locations, container, false);
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coffeshop_locations);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         //maps setup
         Bundle mapViewBundle = null;
@@ -62,18 +67,21 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
 
+
         //setting map with coffeshops
-        mapView = findViewById(R.id.map_view);
+        mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(mapViewBundle);
         initMaps();
 
         if (checkPermission()) {
             checkIfLocationIsEnabled();
         }
+
     }
 
+
     private void checkIfLocationIsEnabled() {
-        mLocationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(LOCATION_SERVICE);
         setLocationListeners();
 
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -92,7 +100,7 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
         putPinsOnMap(gmap);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         gmap.setMyLocationEnabled(true);
@@ -101,9 +109,8 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-
     private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -134,7 +141,7 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
             CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(latLng, 8);
             googleMap.animateCamera(yourLocation);
         }else{
-            Toasty.error(LocationsActivity.this,"Your GPS location is not recognizable!", Toast.LENGTH_SHORT,false).show();
+            Toasty.error(getActivity(),"Your GPS location is not recognizable!", Toast.LENGTH_SHORT,false).show();
         }
     }
 
@@ -150,13 +157,12 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private boolean checkPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             return false;
         }
         return true;
-
     }
 
     @Override
@@ -167,36 +173,36 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
                     initMaps();
                     checkIfLocationIsEnabled();
                 } else {
-                    finish();
+                    getActivity().finish();
                 }
             }
         }
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         mapView.onStart();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         mapView.onStop();
     }
     @Override
-    protected void onPause() {
+    public void onPause() {
         mapView.onPause();
         super.onPause();
     }
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         mapView.onDestroy();
         super.onDestroy();
     }
@@ -207,7 +213,7 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         Bundle mapViewBundle = outState.getBundle(MAP_VIEW_BUNDLE_KEY);
@@ -219,7 +225,7 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.onSaveInstanceState(mapViewBundle);
     }
 
-    private Bitmap resizeMapIcons(int iconName,int width, int height){
+    private Bitmap resizeMapIcons(int iconName, int width, int height){
         Bitmap bm = BitmapFactory.decodeResource(getResources(), iconName);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, width, height, false);
         return resizedBitmap;
@@ -230,7 +236,7 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
         List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
         for (String provider : providers) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return null;
             }
             Location l = mLocationManager.getLastKnownLocation(provider);
@@ -246,13 +252,12 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void setLocationListeners(){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mLocationManager.registerGnssStatusCallback(new GnssStatus.Callback() {
                 @Override
                 public void onFirstFix(int ttffMillis) {
-                    Toasty.success(LocationsActivity.this,"GPS connected.",Toast.LENGTH_SHORT,false).show();
                     isMyLocationOn = true;
                     initMaps();
                 }
@@ -263,7 +268,6 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
                 @Override
                 public void onGpsStatusChanged(int event) {
                     if(event == GpsStatus.GPS_EVENT_FIRST_FIX){
-                        Toasty.success(LocationsActivity.this,"GPS connected.",Toast.LENGTH_SHORT,false).show();
                         isMyLocationOn = true;
                         initMaps();
                     }
@@ -271,5 +275,9 @@ public class LocationsActivity extends AppCompatActivity implements OnMapReadyCa
             });
         }
     }
+
+
+
+
 
 }
