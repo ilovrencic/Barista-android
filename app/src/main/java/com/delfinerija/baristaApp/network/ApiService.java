@@ -1,8 +1,11 @@
 package com.delfinerija.baristaApp.network;
 
+import com.delfinerija.baristaApp.entities.MapLocation;
 import com.delfinerija.baristaApp.entities.Session;
 import com.delfinerija.baristaApp.entities.User;
-import com.delfinerija.baristaApp.entities.UserResponse;
+import com.delfinerija.baristaApp.entities.ApiResponse;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,10 +41,9 @@ public interface ApiService {
 
 
     @POST("/api/v1/session")
-    Call<GenericResponse<UserResponse>> signInUser(@Query("email") String email, @Query("password") String password, @Body Session session);
+    Call<GenericResponse<ApiResponse<User>>> signInUser(@Query("email") String email, @Query("password") String password, @Body Session session);
 
-    //TODO napravit entity lokacija
     @GET("/api/v1/locations")
-    Call<ResponseBody> getLocations();
+    Call<GenericResponse<List<ApiResponse<MapLocation>>>> getLocations(@Header("Authorization") String token, @Query("location") String location);
 
 }

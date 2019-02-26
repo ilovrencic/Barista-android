@@ -3,6 +3,7 @@ package com.delfinerija.baristaApp.fragments;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -23,6 +25,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.entities.ApiResponse;
+import com.delfinerija.baristaApp.entities.MapLocation;
+import com.delfinerija.baristaApp.entities.ViewDialog;
+import com.delfinerija.baristaApp.network.ApiService;
+import com.delfinerija.baristaApp.network.GenericResponse;
+import com.delfinerija.baristaApp.network.InitApiService;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,11 +41,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
@@ -45,6 +59,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap gmap;
     private LocationManager mLocationManager;
     private boolean isMyLocationOn = false;
+    private ApiService apiService;
+    private Call<GenericResponse<List<ApiResponse<MapLocation>>>> getLocations;
+    private ViewDialog viewDialog;
+    private List<ApiResponse<MapLocation>> locations = new ArrayList<>();
 
 
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -60,6 +78,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if(savedInstanceState != null){
+            InitApiService.initApiService();
+        }
+
+        apiService = InitApiService.apiService;
+        viewDialog = new ViewDialog(getActivity());
 
         //maps setup
         Bundle mapViewBundle = null;
@@ -99,11 +124,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         gmap = googleMap;
-        putPinsOnMap(gmap);
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         gmap.setMyLocationEnabled(true);
+        getPins(gmap);
         if(isMyLocationOn){
             zoomToMyLocation(gmap);
         }
@@ -145,15 +170,88 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void putPinsOnMap(GoogleMap googleMap){
-        //TODO proci kroz listu svih lokala i sve lokacije staviti na kartu
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resizeMapIcons(R.drawable.coffee_marker,65,65));
+    private void getPins(final GoogleMap googleMap){
+        String userLocation = getUserLocation();
+        if(userLocation == null){
+            getLocations = apiService.getLocations(getUserToken(),"0.0,0.0");
+        }else {
+            getLocations = apiService.getLocations(getUserToken(), userLocation);
+        }
 
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getLocations.clone().enqueue(new Callback<GenericResponse<List<ApiResponse<MapLocation>>>>() {
+                        @Override
+                        public void onResponse(Call<GenericResponse<List<ApiResponse<MapLocation>>>> call, Response<GenericResponse<List<ApiResponse<MapLocation>>>> response) {
+                            if(response.isSuccessful()){
+                                locations = response.body().getResponseData();
+                                putPinsOnMap(googleMap);
+                            }else{
+                                try {
+                                    showError(response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GenericResponse<List<ApiResponse<MapLocation>>>> call, Throwable t) {
+                            showError(t.getMessage());
+                            t.printStackTrace();
+                        }
+                    });
+                }
+            },100);
+
+
+        /*
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.813823,15.983918)).title("Caffe Bar Finjak").icon(icon));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.817365,15.976507)).title("Caffe Bar History").icon(icon));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.732295,15.993450)).title("Caffe Bar Oxygen").icon(icon));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(45.791110,15.915790)).title("Caffe Bar Vivas Prečko").icon(icon));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.716210,15.997670)).title("Caffe Bar Dobardan").icon(icon));
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.716210,15.997670)).title("Caffe Bar Dobardan").icon(icon));*/
+    }
+
+    private void putPinsOnMap(GoogleMap googleMap){
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resizeMapIcons(R.drawable.coffee_marker,65,65));
+        for(ApiResponse<MapLocation> locationApiResponse : locations){
+            MapLocation mapLocation = locationApiResponse.getData();
+            googleMap.addMarker(new MarkerOptions().position(getLocationFromString(mapLocation.getCoordinates())).title(mapLocation.getCoffee_shop_name()).icon(icon));
+        }
+        mapView.invalidate();
+    }
+
+    private LatLng getLocationFromString(String location){
+        String[] coordinates = location.split(",");
+        Double latitude = Double.valueOf(coordinates[0]);
+        Double longitude = Double.valueOf(coordinates[1]);
+        return new LatLng(latitude,longitude);
+    }
+
+    private String getUserLocation(){
+        Location location = getLastKnownLocation();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if(location != null){
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            LatLng latLng = new LatLng(latitude, longitude);
+
+            stringBuilder.append(latitude).append(",").append(longitude);
+            return stringBuilder.toString();
+        }else{
+            Toasty.error(getActivity(),"No GPS signal.", Toast.LENGTH_SHORT,false).show();
+            return null;
+        }
+    }
+
+    private String getUserToken(){
+        SharedPreferences prefs = getActivity().getSharedPreferences("UserData", MODE_PRIVATE);
+        String token = prefs.getString("token","");
+        return token;
     }
 
     private boolean checkPermission() {
@@ -274,6 +372,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
             });
         }
+    }
+
+    public void showError(String message){
+        new AlertDialog.Builder(getContext())
+                .setTitle("")
+                .setMessage(message)
+                .setPositiveButton("OK",null)
+                .create()
+                .show();
     }
 
 

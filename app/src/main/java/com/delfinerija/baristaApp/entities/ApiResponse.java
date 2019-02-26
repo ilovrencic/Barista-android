@@ -2,7 +2,7 @@ package com.delfinerija.baristaApp.entities;
 
 import com.squareup.moshi.Json;
 
-public class UserResponse {
+public class ApiResponse<T> {
 
     @Json(name = "id")
     private long id;
@@ -11,12 +11,12 @@ public class UserResponse {
     private String type;
 
     @Json(name = "attributes")
-    private User user;
+    private T data;
 
-    public UserResponse(long id,String type,User user){
+    public ApiResponse(long id, String type, T data){
         this.id = id;
         this.type = type;
-        this.user = user;
+        this.data = data;
     }
 
     public long getId() {
@@ -27,8 +27,8 @@ public class UserResponse {
         return type;
     }
 
-    public User getUser() {
-        return user;
+    public T getData() {
+        return data;
     }
 
     public void setId(long id) {
@@ -39,7 +39,7 @@ public class UserResponse {
         this.type = type;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setData(T data) {
+        this.data = data;
     }
 }
