@@ -1,15 +1,12 @@
 package com.delfinerija.baristaApp.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,13 +18,11 @@ import android.widget.Toast;
 import com.delfinerija.baristaApp.R;
 import com.delfinerija.baristaApp.entities.Session;
 import com.delfinerija.baristaApp.entities.User;
-import com.delfinerija.baristaApp.entities.UserResponse;
+import com.delfinerija.baristaApp.entities.ApiResponse;
 import com.delfinerija.baristaApp.entities.ViewDialog;
 import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.GenericResponse;
 import com.delfinerija.baristaApp.network.InitApiService;
-import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
-import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -46,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button login_button;
     private TextView register_text;
     private ApiService apiService;
-    private Call<GenericResponse<UserResponse>> login;
+    private Call<GenericResponse<ApiResponse<User>>> login;
     private Call<ResponseBody> reset_password;
     private ViewDialog viewDialog;
     private TextView forgot_password;
@@ -112,14 +107,14 @@ public class LoginActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                login.enqueue(new Callback<GenericResponse<UserResponse>>() {
+                login.enqueue(new Callback<GenericResponse<ApiResponse<User>>>() {
                     @Override
-                    public void onResponse(Call<GenericResponse<UserResponse>> call, Response<GenericResponse<UserResponse>> response) {
+                    public void onResponse(Call<GenericResponse<ApiResponse<User>>> call, Response<GenericResponse<ApiResponse<User>>> response) {
                         viewDialog.hideDialog();
                         if(response.isSuccessful()){
 
-                            UserResponse userResponse = response.body().getResponseData();
-                            saveUserInMemory(userResponse.getUser());
+                            ApiResponse apiResponse = response.body().getResponseData();
+                            saveUserInMemory((User) apiResponse.getData());
 
                             Intent intent = new Intent(LoginActivity.this,MainMenuActivity.class);
                             startActivity(intent);
@@ -136,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<GenericResponse<UserResponse>> call, Throwable t) {
+                    public void onFailure(Call<GenericResponse<ApiResponse<User>>> call, Throwable t) {
                         viewDialog.hideDialog();
                         showError(t.getMessage());
                         t.printStackTrace();

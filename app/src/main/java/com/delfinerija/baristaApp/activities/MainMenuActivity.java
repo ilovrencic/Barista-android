@@ -50,7 +50,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(isMapServiceOk()){
-                    Intent intent = new Intent(MainMenuActivity.this,LocationsActivity.class);
+                    Intent intent = new Intent(MainMenuActivity.this,FindCoffeshopsActivity.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
