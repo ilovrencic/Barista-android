@@ -103,7 +103,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private void checkIfLocationIsEnabled() {
         mLocationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(LOCATION_SERVICE);
-        setLocationListeners();
 
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -162,7 +161,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(latLng, 8);
             googleMap.animateCamera(yourLocation);
         }else{
-            Toasty.error(getActivity(),"Your GPS location is not recognizable!", Toast.LENGTH_SHORT,false).show();
+            Toasty.error(getActivity(),"No GPS signal!", Toast.LENGTH_SHORT,false).show();
         }
     }
 
@@ -205,7 +204,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void putPinsOnMap(GoogleMap googleMap){
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resizeMapIcons(R.drawable.coffee_marker,65,65));
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(resizeMapIcons(R.drawable.coffee_marker,80,80));
         for(ApiResponse<MapLocation> locationApiResponse : locations){
             MapLocation mapLocation = locationApiResponse.getData();
             googleMap.addMarker(new MarkerOptions().position(getLocationFromString(mapLocation.getCoordinates())).title(mapLocation.getCoffee_shop_name()).icon(icon));
@@ -335,32 +334,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
         }
         return bestLocation;
-    }
-
-    private void setLocationListeners(){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mLocationManager.registerGnssStatusCallback(new GnssStatus.Callback() {
-                @Override
-                public void onFirstFix(int ttffMillis) {
-                    isMyLocationOn = true;
-                    initMaps();
-                }
-
-            });
-        } else{
-            mLocationManager.addGpsStatusListener(new GpsStatus.Listener() {
-                @Override
-                public void onGpsStatusChanged(int event) {
-                    if(event == GpsStatus.GPS_EVENT_FIRST_FIX){
-                        isMyLocationOn = true;
-                        initMaps();
-                    }
-                }
-            });
-        }
     }
 
     public void showError(String message){
