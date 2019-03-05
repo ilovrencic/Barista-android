@@ -36,22 +36,24 @@ public class ConfirmEmailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_email);
 
+
         if(savedInstanceState != null){
             InitApiService.initApiService();
         }
 
+
+
         email_address = getIntent().getStringExtra("email");
-
         apiService = InitApiService.apiService;
-
         animationView = findViewById(R.id.email_animation);
         resend_email = findViewById(R.id.resend_button);
         login = findViewById(R.id.login_me_button);
         email = findViewById(R.id.user_email);
         email.setText(email_address);
-
         animationView.setSpeed((float)0.8);
         animationView.playAnimation();
+
+
 
         initListeners();
     }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.adapters.SectionsPagerAdapter;
 import com.delfinerija.baristaApp.adapters.VerticalViewPager;
 import com.delfinerija.baristaApp.fragments.CheckoutFragment;
 import com.delfinerija.baristaApp.fragments.pickDrinksFragment;

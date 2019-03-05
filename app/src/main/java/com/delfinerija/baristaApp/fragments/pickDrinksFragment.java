@@ -13,7 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.delfinerija.baristaApp.R;
-import com.delfinerija.baristaApp.activities.SectionsPagerAdapter;
+import com.delfinerija.baristaApp.adapters.SectionsPagerAdapter;
 
 public class pickDrinksFragment extends Fragment {
     private TabLayout tabLayout;

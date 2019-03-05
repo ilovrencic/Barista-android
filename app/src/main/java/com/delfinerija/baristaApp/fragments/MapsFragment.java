@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.delfinerija.baristaApp.R;
 import com.delfinerija.baristaApp.entities.ApiResponse;
 import com.delfinerija.baristaApp.entities.MapLocation;
-import com.delfinerija.baristaApp.entities.ViewDialog;
 import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.GenericResponse;
 import com.delfinerija.baristaApp.network.InitApiService;
@@ -61,7 +60,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private boolean isMyLocationOn = false;
     private ApiService apiService;
     private Call<GenericResponse<List<ApiResponse<MapLocation>>>> getLocations;
-    private ViewDialog viewDialog;
     private List<ApiResponse<MapLocation>> locations = new ArrayList<>();
 
 
@@ -84,16 +82,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
 
         apiService = InitApiService.apiService;
-        viewDialog = new ViewDialog(getActivity());
 
-        //maps setup
+
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
 
 
-        //setting map with coffeshops
         mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(mapViewBundle);
         initMaps();
@@ -206,13 +202,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 }
             },100);
 
-
-        /*
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.813823,15.983918)).title("Caffe Bar Finjak").icon(icon));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.817365,15.976507)).title("Caffe Bar History").icon(icon));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.732295,15.993450)).title("Caffe Bar Oxygen").icon(icon));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.791110,15.915790)).title("Caffe Bar Vivas Prečko").icon(icon));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(45.716210,15.997670)).title("Caffe Bar Dobardan").icon(icon));*/
     }
 
     private void putPinsOnMap(GoogleMap googleMap){
@@ -293,6 +282,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onStop() {
         super.onStop();
         mapView.onStop();
+
     }
     @Override
     public void onPause() {
@@ -311,7 +301,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         Bundle mapViewBundle = outState.getBundle(MAP_VIEW_BUNDLE_KEY);
@@ -325,8 +315,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private Bitmap resizeMapIcons(int iconName, int width, int height){
         Bitmap bm = BitmapFactory.decodeResource(getResources(), iconName);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, width, height, false);
-        return resizedBitmap;
+        return Bitmap.createScaledBitmap(bm, width, height, false);
     }
 
 

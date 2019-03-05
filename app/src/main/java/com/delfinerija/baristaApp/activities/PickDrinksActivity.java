@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.adapters.SectionsPagerAdapter;
 import com.delfinerija.baristaApp.fragments.BeersFragment;
 import com.delfinerija.baristaApp.fragments.NonAlcoholFragment;
 import com.delfinerija.baristaApp.fragments.OtherAlcoholFragment;

@@ -33,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BasicActivity {
 
     private EditText first_name;
     private EditText last_name;
@@ -58,13 +58,12 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+
         if(savedInstanceState != null){
             InitApiService.initApiService();
         }
 
         apiService = InitApiService.apiService;
-        viewDialog = new ViewDialog(this);
-
         first_name = findViewById(R.id.first_name);
         last_name = findViewById(R.id.last_name);
         email = findViewById(R.id.email);
@@ -76,11 +75,13 @@ public class RegisterActivity extends AppCompatActivity {
         checkBox = findViewById(R.id.checkBox);
         register = findViewById(R.id.register_button);
         login_text = findViewById(R.id.login_text);
+        viewDialog = new ViewDialog(this);
 
         initListeners();
     }
 
     private void initListeners(){
+
         login_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,22 +219,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    public void showError(String message){
-        new AlertDialog.Builder(this)
-                .setTitle("")
-                .setMessage(message)
-                .setPositiveButton("OK",null)
-                .create()
-                .show();
-    }
-
-    private boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
     private void registration(User user){
         viewDialog.showDialog();
         registerUser = apiService.registerUser(user);
@@ -277,5 +262,4 @@ public class RegisterActivity extends AppCompatActivity {
     private void resetEmailBoolean(boolean value){
         emailTaken = value;
     }
-
 }

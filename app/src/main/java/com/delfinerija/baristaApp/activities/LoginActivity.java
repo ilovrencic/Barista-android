@@ -34,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BasicActivity{
 
     private EditText email;
     private EditText password;
@@ -52,18 +52,21 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+
+
         if(savedInstanceState != null){
             InitApiService.initApiService();
         }
 
-        apiService = InitApiService.apiService;
-        viewDialog = new ViewDialog(this);
 
+
+        apiService = InitApiService.apiService;
         email = findViewById(R.id.email_signin);
         password = findViewById(R.id.password_signin);
         login_button = findViewById(R.id.login_button);
         register_text = findViewById(R.id.register_text);
         forgot_password = findViewById(R.id.forgot_password);
+        viewDialog = new ViewDialog(this);
 
         initListeners();
     }
@@ -89,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void login_user(String email,String password){
         Session session = new Session(email,password);
@@ -142,15 +148,48 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void saveUserInMemory(User user){
-        getSharedPreferences("UserData", MODE_PRIVATE)
-                        .edit()
-                        .putString("token",user.getToken())
-                        .putString("name",user.getFirst_name())
-                        .putBoolean("isLogged",true)
-                        .apply();
+    private void reset_password(final String email){
+        viewDialog.showDialog();
+        reset_password = apiService.resetPassword(email);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                reset_password.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        viewDialog.hideDialog();
+                        if(response.isSuccessful()){
+                            Intent intent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
+                            intent.putExtra("email",email);
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        }else{
+                            //TODO change error message
+                            try {
+                                showError(response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        viewDialog.hideDialog();
+                        showError(t.getMessage());
+                        t.printStackTrace();
+                    }
+                });
+            }
+        },300);
     }
 
+
+    /**
+     * Method that shows a dialog for password resetting
+     */
     private void show_dialog(){
         LayoutInflater inflater= LayoutInflater.from(LoginActivity.this);
         View view=inflater.inflate(R.layout.dialog_reset_passoword, null);
@@ -183,56 +222,4 @@ public class LoginActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public void showError(String message){
-        new AlertDialog.Builder(this)
-                .setTitle("")
-                .setMessage(message)
-                .setPositiveButton("OK",null)
-                .create()
-                .show();
-    }
-
-    private boolean isEmailValid(String email) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-
-    private void reset_password(final String email){
-        viewDialog.showDialog();
-        reset_password = apiService.resetPassword(email);
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                reset_password.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        viewDialog.hideDialog();
-                        if(response.isSuccessful()){
-                            Intent intent = new Intent(LoginActivity.this,ResetPasswordActivity.class);
-                            intent.putExtra("email",email);
-                            startActivity(intent);
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        }else{
-                            try {
-                                showError(response.errorBody().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        viewDialog.hideDialog();
-                        showError(t.getMessage());
-                        t.printStackTrace();
-                    }
-                });
-            }
-        },300);
-    }
 }

@@ -43,7 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class QRActivitiy extends AppCompatActivity {
+public class QRActivitiy extends BasicActivity {
 
     private LottieAnimationView animationView;
     private CodeScanner mCodeScanner;
@@ -81,6 +81,8 @@ public class QRActivitiy extends AppCompatActivity {
         });
     }
 
+
+    //TODO change this to only reset boolean value
     private void logut_user(){
         getSharedPreferences("UserData", MODE_PRIVATE)
                 .edit()
@@ -142,7 +144,6 @@ public class QRActivitiy extends AppCompatActivity {
 
     /**
      * @param QRcode scanned QR code in string format
-     *
      * API call to validate QR code
      */
     private void checkQRCode(String QRcode){
@@ -184,22 +185,7 @@ public class QRActivitiy extends AppCompatActivity {
                     }
                 });
             }
-        }, 1500);
-    }
-
-    private String getUserToken(){
-        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
-        String token = prefs.getString("token","");
-        return token;
-    }
-
-    private void vibratePhone(){
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            v.vibrate(500);
-        }
+        }, 500);
     }
 
     private boolean checkPermission() {
@@ -232,17 +218,6 @@ public class QRActivitiy extends AppCompatActivity {
             mCodeScanner.startPreview();
         }
     }
-
-    public void showError(String message){
-        new AlertDialog.Builder(this)
-                .setTitle("")
-                .setMessage(message)
-                .setPositiveButton("OK",null)
-                .create()
-                .show();
-    }
-
-
 }
 
 

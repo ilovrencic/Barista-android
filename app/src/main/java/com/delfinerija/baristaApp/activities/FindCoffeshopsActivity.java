@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.adapters.SectionsPagerAdapter;
 import com.delfinerija.baristaApp.fragments.BeersFragment;
 import com.delfinerija.baristaApp.fragments.MapsFragment;
 import com.delfinerija.baristaApp.network.ApiService;
