@@ -36,6 +36,8 @@ public class SlidesActivity extends MaterialIntroActivity {
         addSlide(new IntroSlide2());
         addSlide(new IntroSlide3());
         addSlide(new IntroSlide4());
+
+        //TODO change icons to white
     }
 
 

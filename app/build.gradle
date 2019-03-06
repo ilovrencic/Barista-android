@@ -65,4 +65,5 @@ dependencies {
     implementation project(path: ':expandableListView')
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'com.github.Shashank02051997:FancyGifDialog-Android:1.1'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 }

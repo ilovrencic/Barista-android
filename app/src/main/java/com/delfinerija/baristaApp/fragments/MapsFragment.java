@@ -1,14 +1,13 @@
 package com.delfinerija.baristaApp.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.GnssStatus;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.delfinerija.baristaApp.R;
+import com.delfinerija.baristaApp.activities.FindCoffeshopsActivity;
 import com.delfinerija.baristaApp.entities.ApiResponse;
 import com.delfinerija.baristaApp.entities.MapLocation;
 import com.delfinerija.baristaApp.network.ApiService;
@@ -52,6 +52,7 @@ import retrofit2.Response;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
+@SuppressLint("ValidFragment")
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
@@ -66,6 +67,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final int LOCATION_REQUEST_CODE = 1997;
     private static final int ENABLE_LOCATION_RESULT_CODE = 42;
+
+    @SuppressLint("ValidFragment")
+    public MapsFragment(List<ApiResponse<MapLocation>> locations){
+        this.locations = locations;
+    }
+
 
     @Nullable
     @Override
@@ -123,7 +130,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         gmap.setMyLocationEnabled(true);
-        getPins(gmap);
+        putPinsOnMap(gmap);
         if(isMyLocationOn){
             zoomToMyLocation(gmap);
         }
@@ -344,9 +351,4 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 .create()
                 .show();
     }
-
-
-
-
-
 }
