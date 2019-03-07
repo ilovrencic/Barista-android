@@ -37,6 +37,22 @@ public class MapLocation {
         return coordinates;
     }
 
+    public Double getDistance() {
+        return distance;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }

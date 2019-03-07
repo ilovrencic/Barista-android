@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="125dp"
     android:orientation="horizontal"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:layout_marginBottom="5dp"
+    tools:targetApi="m"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <ImageView
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:src="@drawable/offee_cup_1"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:id="@+id/coffeeshop_image"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,18 +31,19 @@
             android:textSize="20sp"
             android:fontFamily="@font/baloo"
             android:textColor="@color/black"
+            android:id="@+id/coffeeshop_name"
             />
 
 
         <TextView
+            android:id="@+id/coffeeshop_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ilica_35"
-            android:textSize="16sp"
             android:layout_marginStart="5dp"
-            android:textColor="@android:color/darker_gray"
             android:layout_marginTop="1dp"
-            />
+            android:text="@string/ilica_35"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,13 +58,14 @@
                 android:layout_height="match_parent"
                 android:layout_margin="2dp"
                 android:src="@drawable/location_icon_red" />
-            
+
             <TextView
+                android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0.7"
                 android:layout_marginStart="5dp"
-                android:textColor="@color/black"/>
+                android:text="0.7"
+                android:textColor="@color/black" />
             
             <TextView
                 android:layout_width="wrap_content"

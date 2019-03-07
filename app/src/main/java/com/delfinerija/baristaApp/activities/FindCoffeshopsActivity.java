@@ -32,6 +32,7 @@ import com.delfinerija.baristaApp.adapters.SectionsPagerAdapter;
 import com.delfinerija.baristaApp.entities.ApiResponse;
 import com.delfinerija.baristaApp.entities.MapLocation;
 import com.delfinerija.baristaApp.fragments.BeersFragment;
+import com.delfinerija.baristaApp.fragments.ListOfCoffeshopsFragment;
 import com.delfinerija.baristaApp.fragments.MapsFragment;
 import com.delfinerija.baristaApp.network.ApiService;
 import com.delfinerija.baristaApp.network.GenericResponse;
@@ -96,7 +97,7 @@ public class FindCoffeshopsActivity extends BasicActivity implements LocationLis
     private void setupViewPager() {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         sectionsPagerAdapter.addFragment(new MapsFragment(locations));
-        sectionsPagerAdapter.addFragment(new BeersFragment());
+        sectionsPagerAdapter.addFragment(new ListOfCoffeshopsFragment(locations));
         ViewPager viewPager = findViewById(R.id.holder);
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
@@ -279,6 +280,7 @@ public class FindCoffeshopsActivity extends BasicActivity implements LocationLis
             }
         });
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
