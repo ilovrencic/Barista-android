@@ -6,6 +6,6 @@ The app was made for ASC ( App Start Contest ) but it was discontinued because o
 
 App screenshots:
 
-![Screenshot](screenshot.png)
+![Screenshot](Screenshots/1.jpeg)
 
 
