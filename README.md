@@ -6,7 +6,14 @@ The app was made for ASC ( App Start Contest ) but it was discontinued because o
 
 App screenshots:
 
-Intro screen
+![Screenshot](Screenshots/1.jpeg)
 
-![alt text](https://imgur.com/a/4XHjLL8)
+![Screenshot](Screenshots/2.jpeg)
+
+![Screenshot](Screenshots/3.jpeg)
+
+![Screenshot](Screenshots/4.jpeg)
+
+![Screenshot](Screenshots/5.jpeg)
+
 
