@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white">
     <!---Middle section-->
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/location_animation"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="50dp"
+        app:lottie_fileName="location.json"
+        app:lottie_loop="true"/>
+
+    <TextView
+        android:id="@+id/location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finding_your_location"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:fontFamily="@font/baloo"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/location_animation"/>
 
     <RelativeLayout
         android:id="@+id/relative_layout23"
@@ -12,10 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            layout="@layout/layout_middle_section" />
+        <include layout="@layout/layout_middle_section" />
 
 
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

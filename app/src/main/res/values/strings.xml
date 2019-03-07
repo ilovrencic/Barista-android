@@ -13,4 +13,7 @@
     <string name="ivan">Ivan</string>
     <string name="google_api">AIzaSyBVPyhlt979T-ZoHOsX3-t8jxHTmjlDuts</string>
     <string name="reset_password">We\'ve sent you a link for password resetting to your email address. Please check your email inbox. It could take up to 10 minutes for email to arrive.</string>
+    <string name="history_cafe">History Cafe</string>
+    <string name="ilica_35">Ilica 35</string>
+    <string name="finding_your_location">Finding your location...</string>
 </resources>
